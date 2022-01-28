@@ -1,0 +1,26 @@
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
+.login,
+.image {
+  min-height: 100vh;
+}
+
+.bg-image {
+  background-image: url('../../../assets/images/Sign-in-bg.jpeg');
+  background-size: cover;
+  background-position: center center;
+}
+.logo {
+    margin: auto;
+    width: 35em;
+    height: auto;
+}
+.error
+{
+    color: rgb(255, 0, 0);
+}

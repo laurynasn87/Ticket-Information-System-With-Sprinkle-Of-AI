@@ -1,0 +1,89 @@
+<main class="main-bg">
+  <br>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-9">
+        <div class="card container-card mb-5">
+          <div class="card-header mb-2" *ngIf="this.Organization">
+            <img class="avatar" src="../../../assets/images/company-avatar.png">
+            {{this.Organization.name}}
+
+          </div>
+          <div class="card-body">
+
+            <mat-tab-group mat-align-tabs="start">
+              <mat-tab label="Tickets">
+                <table class="table table-hover">
+                  <thead class="table-head">
+                    <tr>
+                      <th scope="col" *ngFor="let column of Ticket_dataColumns">{{column.name}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let row of Ticket_data ">
+                      <ng-container *ngFor="let column of Ticket_dataColumns">
+                        <th scope="row" [routerLink]="['/Ticket', row.id]" *ngIf="column.dataName == 'id'"
+                          class="text-muted li-link">#{{row[column.dataName]}}</th>
+                        <td scope="col" [routerLink]="['/Ticket', row.id]" *ngIf="column.dataName != 'id'"
+                          class="li-link">{{GetDataProperty(column.dataName,row)}}</td>
+                      </ng-container>
+                    </tr>
+                  </tbody>
+                </table>
+              </mat-tab>
+              <mat-tab label="Users">
+                <table class="table table-hover">
+                  <thead class="table-head">
+                    <tr>
+                      <th scope="col" *ngFor="let column of User_dataColumns">{{column.name}}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let row of User_data ">
+                      <ng-container *ngFor="let column of User_dataColumns">
+                        <th scope="row" [routerLink]="['/User', row.id]" *ngIf="column.dataName == 'id'"
+                          class="text-muted li-link">#{{row[column.dataName]}}</th>
+                        <td scope="col" [routerLink]="['/User', row.id]" *ngIf="column.dataName != 'id'"
+                          class="li-link">{{GetDataProperty(column.dataName,row)}}</td>
+                      </ng-container>
+                    </tr>
+                  </tbody>
+                </table>
+              </mat-tab>
+            </mat-tab-group>
+            <div class="spinners">
+              <mat-spinner diameter=100 class="spinner" *ngIf="loading"></mat-spinner>
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+      <div class="col-3">
+        <div class="card container-card">
+          <div class="card-header side-col-header">Details</div>
+          <div class="card-body">
+            <table class="table">
+              <tbody>
+                <tr *ngFor="let row of this.RightPane">
+                  <th>
+                    <h5>{{row.Name}}</h5>
+                  </th>
+                  <td>
+                    <h5 class="text-muted">{{GetDataProperty(row.DataField,this.Organization)}}</h5>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+
+
+</main>

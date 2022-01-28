@@ -1,0 +1,46 @@
+<mat-progress-bar *ngIf="show_bar" mode="indeterminate"></mat-progress-bar>
+<main class="main-bg">
+    <div class="card container-card">
+      <div class="row">
+       <div class="d-flex justify-content-between"> 
+         <div><h3 class="card-title mb-1">{{CurrMode}}</h3>
+          <span class="text-muted" *ngIf="TicketCount != 1">{{TicketCount}} tickets</span>
+          <span class="text-muted" *ngIf="TicketCount == 1">{{TicketCount}} ticket</span>
+        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>View</mat-label>
+          <mat-select [(ngModel)]="CurrMode" (selectionChange)="SelectResults()">
+            <mat-option *ngFor="let mode of Filters_Config" [value]="mode.name">
+              {{mode.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      </div>
+      <table class="table  mt-2">
+        <thead class="table-head">
+            <th scope="col" *ngFor="let column of Columns_Config">{{column.name}}</th>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let row of Data">
+            <tr class="status-row" *ngIf="row.data.length > 0">
+              <th class="status-th" [attr.colspan]="Columns_Config.length"><span style="font-weight:normal">Ticket
+                  status:</span> {{row.ticketStatus}}</th>
+            </tr>
+            <ng-container *ngFor="let dataLine of row.data">
+              <tr class="ticket-line">
+                <ng-container *ngFor="let column of Columns_Config">
+                  <td scope="col" [routerLink]="['/Ticket', dataLine['id']]" class="li-link">
+                    {{GetDataProperty(column.dataName,dataLine)}}</td>
+                </ng-container>
+              </tr>
+            </ng-container>
+          </ng-container>
+  
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+

@@ -1,0 +1,332 @@
+<mat-progress-bar *ngIf="show_bar" mode="indeterminate"></mat-progress-bar>
+<main class="main-bg" id="main" (scroll)="onScroll()">
+  <div class="card container-card">
+    <div class="row">
+      <img class="img-Tis" *ngIf="isInternalTicket" title="This is internal ticket"
+        src="../../../assets/images/TIS_Img.png">
+      <h3 class="card-title text-center">{{this.Ticket?.subject}}</h3>
+    </div>
+
+    <div class="spinners">
+      <mat-spinner diameter=100 class="spinner" *ngIf="loading.MainLoading"></mat-spinner>
+    </div>
+    <button class="type-dropdown" mat-icon-button [matMenuTriggerFor]="menu" aria-label="menu"
+      *ngIf="!authService.isRequester">
+      <i class="fa fa-chevron-down fa-lg rotate"></i>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item [disabled]="TicketInfoType" (click)='setInfoType(true)'>
+        <i class="fa fa-info fa-lg"></i>
+        <span class="type-text"> Ticket Info</span>
+      </button>
+      <button mat-menu-item [disabled]="!TicketInfoType" (click)="setInfoType(false)">
+        <i class="fa fa-laptop fa-lg"></i>
+        <span class="type-text"> Ai</span>
+      </button>
+      <button mat-menu-item *ngIf="AllowComments && !isInternalTicket" [disabled]="isTicketClosed"
+        (click)="showModal()">
+        <i class="fa fa-pencil-square-o fa-lg"></i>
+        <span class="type-text">Write a response</span>
+      </button>
+      <button mat-menu-item (click)="updateComments()" [disabled]="isTicketClosed" *ngIf="!isInternalTicket">
+        <i class="fa fa-refresh fa-lg"></i>
+        <span class="type-text">Refresh Comments</span>
+      </button>
+      <button mat-menu-item (click)="closeTicket()" *ngIf="isInternalTicket && !isTicketClosed  && !authService.isRequester">
+        <i class="fa fa-times fa-lg"></i>
+        <span class="type-text">Close</span>
+      </button>
+      <button mat-menu-item (click)="deleteTicket()" *ngIf="isInternalTicket && this.authService.isAdmin">
+        <i class="fa fa-trash fa-lg"></i>
+        <span class="type-text">Delete</span>
+      </button>
+    </mat-menu>
+  </div>
+  <br>
+  <div class="container-fluid">
+
+    <div *ngIf="TicketInfoType && this?.Ticket"
+      [ngClass]="{'justify-content-center': !authService.isRequester && !isInternalTicket }" class="row">
+      <div class="col-3"
+        [ngClass]="{'col': !authService.isRequester || !isInternalTicket, 'col-3' : authService.isRequester || isInternalTicket }">
+        <div class="card container-card" >
+            <div class="card-header side-col-header" style="display: flex; justify-content: space-between;">{{PageConfig.LeftPaneName}}            <div>
+              <i *ngIf="!this.authService.isRequester && isInternalTicket && !isTicketClosed" class="fa fa-pencil fa-lg mx-2 edit-buttons" (click)="EnableEditMode()" aria-hidden="true"> </i>
+              <i *ngIf="EditMode" class="fa fa-check fa-lg edit-buttons" (click)="SaveFields()" aria-hidden="true"></i>
+            </div></div>
+
+
+          <div class="card-body">
+            <table class="table side-table">
+              <tbody>
+                <tr *ngFor="let row of this.LeftPane">
+                  <th *ngIf="!EditMode">
+                    <h5>{{row.Name}}</h5>
+                  </th>
+                  <td *ngIf="!EditMode">
+                    <h5 class="text-muted">{{GetDataProperty(row.DataField,this.Ticket)}}</h5>
+                  </td>
+                  <th *ngIf="EditMode && row.Edit">
+                    <h5>{{row.Name}}</h5>
+                  </th>
+                  <td *ngIf="EditMode && row.Edit">
+                    <mat-select #editable [(ngModel)]="row.EditableValue" *ngIf="row.EditType == 'Select'  && row?.SelectList == undefined">
+                      <mat-option *ngFor="let item of row.SelectValues" [value]="item">
+                        {{item}}
+                      </mat-option>
+                    </mat-select>
+                      <mat-select #editable [(ngModel)]="row.EditableValue" *ngIf="row.EditType == 'Select' && row?.SelectList != undefined">
+                      <mat-option *ngFor="let item of getSelectList(row.SelectList)" [value]="item">
+                        {{item}}
+                      </mat-option>
+                      </mat-select>
+                    <input #editable [(ngModel)]="row.EditableValue" *ngIf="row.EditType == 'text' || row.EditType == 'Array'" matInput   >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="card container-card mb-3">
+          <div class="d-flex justify-content-between">
+            <p class="text-muted"><img class="avatar" src="../../../assets/images/default-avatar.png"><b class="name"
+                [routerLink]="['/User', this.Ticket.requester_id.id]" *ngIf="!authService.isRequester"> {{this.Ticket.requester_id.name}}</b>
+                <b class="name" *ngIf="authService.isRequester"> {{this.Ticket.requester_id.name}}</b></p>
+            <p class="text-muted">{{formatDate(this.Ticket.created_at)}}</p>
+          </div>
+          <div class="card-body">
+            {{removeTags(this.Ticket.description)}}
+          </div>
+
+          <div class="card-body d-flex align-items-start" *ngIf="this.Ticket?.attachments?.length > 0">
+            <hr>
+            <div class="card m-1" style="width: 8rem;" *ngFor="let file of this.Ticket.attachments">
+              <a [href]="file.content_url" *ngIf="file.content_type == 'image/png' || file.content_type == 'image/jpeg'"
+                target="_blank"><img class="card-img-top comment-img" [src]="file.content_url"></a>
+              <a [href]="file.content_url" style="align-self:center"
+                *ngIf="file.content_type != 'image/png' && file.content_type != 'image/jpeg'" target="_blank"><img
+                  class="card-img-top comment-img doc-img" src="../../../assets/images/file.png"></a>
+              <div class="card-body comment-body py-2">
+                <h6 class="card-title file-name">{{file.file_name}}</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngFor="let row of this.Comments">
+          <div class="card container-card mb-3" *ngIf="row.public || !authService.isRequester"
+            [ngStyle]="{'background-color': (!row.public) ? 'lightyellow' : '#ffffff'}">
+            <div class="d-flex justify-content-between">
+              <p class="text-muted"> <img class="avatar" src="../../../assets/images/default-avatar.png"><b class="name"
+                  [routerLink]="['/User', row.author_id.id]" *ngIf="!authService.isRequester"> {{row.author_id.name}}</b>
+                  <b class="name" *ngIf="authService.isRequester"> {{row.author_id.name}}</b></p>
+              <p class="text-muted">{{formatDate(row.created_at)}}</p>
+            </div>
+            <div class="card-body">
+
+              {{row.body}}
+
+            </div>
+            <div class="card-body d-flex align-items-start" *ngIf="row.attachments.length > 0">
+              <hr>
+              <div class="card m-1 file-card" *ngFor="let file of row.attachments">
+                <a [href]="file.content_url"
+                  *ngIf="file.content_type == 'image/png' || file.content_type == 'image/jpeg'"><img
+                    class="card-img-top comment-img" [src]="file.content_url"></a>
+                <a [href]="file.content_url" style="align-self:center"
+                  *ngIf="file.content_type != 'image/png' && file.content_type != 'image/jpeg'"><img
+                    class="card-img-top comment-img doc-img" src="../../../assets/images/file.png"></a>
+                <div class="card-body comment-body py-2">
+                  <h6 class="card-title file-name">{{file.file_name}}</h6>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer" *ngIf="!row.public">Private note</div>
+          </div>
+        </div>
+        <div class="card container-card" *ngIf="!isTicketClosed && isInternalTicket && authService.isUserLinked">
+          <div class="card-body new-comment">
+            <mat-tab-group mat-align-tabs="start" (selectedTabChange)="CreationTypeChange($event)">
+              <mat-tab label="Public">
+                <mat-form-field class="w-100" appearance="fill">
+                  <textarea [(ngModel)]="this.NewCommentContent" matInput placeholder="Message" rows="9"></textarea>
+                </mat-form-field>
+              </mat-tab>
+              <mat-tab label="Private" *ngIf="!authService.isRequester">
+                <mat-form-field class="w-100" appearance="fill">
+                  <textarea matInput [(ngModel)]="this.NewCommentContent" placeholder="Message" rows="9"></textarea>
+                </mat-form-field>
+              </mat-tab>
+            </mat-tab-group>
+
+          </div>
+          <button type="button" [disabled]="this.NewCommentContent==''" (click)="WriteResponse()" mat-button
+            class="btn btn-outline-dark">Send</button>
+
+        </div>
+
+      </div>
+
+      <div class="col" *ngIf="!authService.isRequester && !isInternalTicket">
+        <div class="card container-card">
+          <div class="card-header side-col-header">{{PageConfig.RightPaneName}}</div>
+          <div class="card-body">
+            <table class="table side-table">
+              <tbody>
+                <tr *ngFor="let row of this.RightPane">
+                  <th>
+                    <h5>{{row.Name}}</h5>
+                  </th>
+                  <td>
+                    <h5 class="text-muted" *ngIf="row?.Type == undefined">{{GetDataProperty(row.DataField,this.Ticket)}}
+                    </h5>
+                    <h5 class="text-muted" *ngIf="row?.Type !==undefined">
+                      {{HandleType(GetDataProperty(row.DataField,this.Ticket),row.Type)}}</h5>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!TicketInfoType && !authService.isRequester" class="row justify-content-center">
+      <div *ngIf="isNewlyCreated() && (MostSimilarByMainData?.length < 1 || MostSimilarByMainData==undefined)" style="display: flex;
+      flex-direction: column;">
+        <h4 style="align-self: center;">This is a newly created Ticket</h4>
+        <h4 style="align-self: center;">AI models might be still in the proccess of training</h4>
+      </div>
+      <div class="col">
+        <div class="card Ai-card">
+          <div class="card-header">Most similar Tickets <span data-toggle="tooltip"
+              title="MainData consists of subject and desciription">(by MainData)</span></div>
+          <div class="card-body">
+            <table class="table">
+              <div class="spinners">
+                <h4 *ngIf="MostSimilarByMainData?.length < 1 && !loading.MainDataAi">No records to show</h4>
+                <mat-spinner class="spinner" *ngIf="loading.MainDataAi"></mat-spinner>
+              </div>
+              <tbody>
+                <tr (click)="openTicket(row.id)" *ngFor="let row of MostSimilarByMainData" class="tile-line">
+                  <td class="text-muted">#{{row.id}}</td>
+                  <td class="tile-subject">
+                    <div class="truncated-text" title="{{row.subject}}">{{row.subject}}</div>
+                  </td>
+                  <td>{{row.similarity}}%</td>
+                  <td>{{GetDataProperty('organization.name',row)}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card Ai-card">
+          <div class="card-header">Most similar Tickets <span data-toggle="tooltip"
+              title="FullData consists of subject, desciription and comments">(by FullData)</span></div>
+          <div class="card-body">
+            <table class="table">
+              <div class="spinners">
+                <h4 *ngIf="MostSimilarByFullData?.length < 1 && !loading.MainDataAi">No records to show</h4>
+                <mat-spinner class="spinner" *ngIf="loading.MainDataAi"></mat-spinner>
+              </div>
+              <tbody>
+                <tr (click)="openTicket(row.id)" *ngFor="let row of MostSimilarByFullData" class="tile-line">
+                  <td class="text-muted">#{{row.id}}</td>
+                  <td class="tile-subject">
+                    <div class="truncated-text" title="{{row.subject}}">{{row.subject}}</div>
+                  </td>
+                  <td>{{row.similarity}}%</td>
+                  <td>{{GetDataProperty('organization.name',row)}}</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card Ai-card">
+          <div class="card-header">Most similar Tickets within {{OrganizationName}}</div>
+          <div class="card-body">
+            <table class="table">
+              <div class="spinners">
+                <h4 *ngIf="MostSimilarWithinOrg?.length < 1 && !loading.OrgDataAi">No records to show</h4>
+                <mat-spinner class="spinner" *ngIf="loading.OrgDataAi"></mat-spinner>
+              </div>
+              <tbody>
+                <tr (click)="openTicket(row.id)" *ngFor="let row of MostSimilarWithinOrg" class="tile-line">
+                  <td class="text-muted">#{{row.id}}</td>
+                  <td class="tile-subject">
+                    <div class="truncated-text" title="{{row.subject}}">{{row.subject}}</div>
+                  </td>
+                  <td class="tile-subject">{{row.similarity}}%</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card Ai-card">
+          <div class="card-header">Most Experienced User for this Problem</div>
+          <div class="card-body">
+            <table class="table">
+              <div class="spinners">
+                <h4 *ngIf="MostExperienceUser?.length < 1 && !loading.MainDataAi">No records to show</h4>
+                <mat-spinner *ngIf="loading.MainDataAi"></mat-spinner>
+              </div>
+              <tbody>
+                <tr (click)="openUser(row.id)" *ngFor="let row of MostExperienceUser; let i = index"
+                  [attr.data-index]="i" class="tile-line">
+                  <td class="text-muted">{{i+1}}</td>
+                  <td class="tile-subject">{{row.user}}</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+
+  <div (click)="scrollToTop()" id="top" *ngIf="pageYoffset > 1000" class="scroll-to-top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+  </div>
+</main>
+
+<!-- Modal -->
+<div class="modal fade" id="CreationModal" tabindex="-1" role="dialog" aria-labelledby="CreationModal"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Write a response</h5>
+        <i class="fa fa-times fa-lg" (click)='closeModal()' aria-hidden="true"></i>
+      </div>
+      <div class="modal-body">
+        <mat-tab-group mat-align-tabs="start" (selectedTabChange)="CreationTypeChange($event)">
+          <mat-tab label="Public">
+            <textarea class="form-control" [(ngModel)]="NewCommentContent" id="PublicResponseValueTextArea"
+              rows="7"></textarea>
+          </mat-tab>
+          <mat-tab label="Private">
+            <textarea class="form-control" [(ngModel)]="NewCommentContent" id="PrivateResponseValueTextArea"
+              style="background-color:lightyellow;" rows="7"></textarea>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <button type="button" class="btn btn-danger" (click)='closeModal()' data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-success" (click)="WriteResponse()"
+          [disabled]="!(this.NewCommentContent != null &&  this.NewCommentContent != '')">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>

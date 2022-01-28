@@ -1,0 +1,37 @@
+<div class="container-fluid">
+    <div class="row no-gutter">
+        <!-- The image half -->
+        <div class="col-md-8 d-none d-md-flex bg-image">
+            <img src="https://wealth-dynamix.com/wp-content/uploads/2020/11/logo.png" class="logo" alt="logo">
+        </div>
+
+
+        <!-- The content half -->
+        <div class="col-md-4 bg-light">
+            <div class="login d-flex align-items-center py-5">
+
+                <!-- Demo content-->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-10 col-xl-7 mx-auto">
+                            <h3 class="display-4">Sign In</h3>
+                            <p *ngIf="this.showErrorMsg" class="mb-4 error">{{ErrorMsg}}</p>
+                            <div class="formGroup">
+                                <div class="form-group mb-3">
+                                    <input id="inputEmail" type="email" placeholder="Email address" autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4" #email required>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <input id="inputPassword" type="password" placeholder="Password" class="form-control rounded-pill border-0 shadow-sm px-4 text-primary" #password required>
+                                </div>
+          
+                                <button (click)="login(email.value, password.value)" ng-disabled="!this.loading" type="submit" class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm"><span *ngIf="!this.loading">Submit</span><div *ngIf="this.loading" ><span *ngIf="this.loading"  class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span> Loading...</div></button>
+                          </div>
+                        </div>
+                    </div>
+                </div><!-- End -->
+
+            </div>
+        </div><!-- End -->
+
+    </div>
+</div>

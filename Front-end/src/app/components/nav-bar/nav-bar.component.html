@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg navbar-red navbar-dark" *ngIf="this.router.url !== '/sign-in'">
+  <div class="wrapper"> </div>
+  <div class="container-fluid all-show">
+    <a class="navbar-brand" href="home">{{name}}</a>
+
+    <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto mb-2 mb-lg-0 ">
+        <li class="nav-item" *ngIf="(this.authService.isRequester || this.authService.isAdmin)  && this.authService.isOrgRequested" > <i class="fa fa-plus fa-lg new-ticket-icon"
+          aria-hidden="true" (click)='open()'></i></li>
+        <li class="nav-item"> <a class="nav-link" [routerLink]="['/home']">Home</a> </li>
+        <li class="nav-item" *ngIf="this.authService.isUserLinked"> <a class="nav-link" [routerLink]="['/MyTickets']">My
+            Tickets</a> </li>
+        <li class="nav-item"> <a class="nav-link" *ngIf="this.authService.isOrgRequested || !this.authService.isRequester" [routerLink]="['/Search']">Search</a> </li>
+        <li class="nav-item" *ngIf="!this.authService.isRequester"> <a class="nav-link" [routerLink]="['/Statistics']">Statistics</a> </li>
+        <li class="nav-item">
+          <button class="menu-dropdown" mat-icon-button [matMenuTriggerFor]="menu" aria-label="menu">
+            <i class="fa fa-ellipsis-v fa-2x" style="color:rgb(255, 255, 255)" aria-hidden="true"></i>
+          </button>
+          <mat-menu #menu="matMenu" class="select-menu">
+           <!-- <button mat-menu-item class="menu-name">
+              <span class="menu-text">{{this.authService.GetUserName}}</span>
+            </button>-->
+            
+            <button mat-menu-item [routerLink]="['/Admin']" *ngIf="this.authService.isAdmin">
+              <i class="fa fa-cogs fa-lg"></i>
+              <span class="menu-text">Admin Panel</span>
+            </button>
+            <button mat-menu-item (click)="authService.SignOut()">
+              <i class="fa fa-sign-out fa-lg"></i>
+              <span class="menu-text">Log out</span>
+            </button>
+          </mat-menu>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

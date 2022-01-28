@@ -1,0 +1,80 @@
+<main class="main-bg">
+    <br>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-9">
+                <div class="card container-card mb-5">
+                    <div class="card-header mb-2" *ngIf="this.User">
+                        <img class="avatar" src="../../../assets/images/default-avatar.png">
+                        {{this.User.name}}
+                    
+                    </div>
+                    <div class="card-body">
+
+                        <mat-tab-group mat-align-tabs="start">
+                            <mat-tab label="Assigned">
+                        <table class="table table-hover">
+                            <thead class="table-head">
+                                <tr>
+                                  <th scope="col" *ngFor="let column of dataColumns">{{column.name}}</th>
+                                </tr>
+                              </thead>
+                            <tbody>
+                                <tr *ngFor="let row of Assigned_Tickets">
+                                    <ng-container  *ngFor="let column of dataColumns">
+                                      <th scope="row" [routerLink]="['/Ticket', row.id]" *ngIf="column.dataName == 'id'" class="text-muted li-link">#{{row[column.dataName]}}</th>
+                                      <td scope="col"[routerLink]="['/Ticket', row.id]" *ngIf="column.dataName != 'id'" class="li-link">{{GetDataProperty(column.dataName,row)}}</td>
+                                    </ng-container >
+                                  </tr>
+                            </tbody>
+                          </table>
+                          </mat-tab>
+                          <mat-tab label="Requested">
+                            <table class="table table-hover">
+                                <thead class="table-head">
+                                    <tr>
+                                      <th scope="col" *ngFor="let column of dataColumns">{{column.name}}</th>
+                                    </tr>
+                                  </thead>
+                                <tbody>
+                                    <tr *ngFor="let row of Requested_Tickets ">
+                                        <ng-container  *ngFor="let column of dataColumns">
+                                          <th scope="row" [routerLink]="['/Ticket', row.id]" *ngIf="column.dataName == 'id'" class="text-muted li-link">#{{row[column.dataName]}}</th>
+                                          <td scope="col"[routerLink]="['/Ticket', row.id]" *ngIf="column.dataName != 'id'" class="li-link">{{GetDataProperty(column.dataName,row)}}</td>
+                                        </ng-container >
+                                      </tr>
+                                </tbody>
+                              </table>
+                              </mat-tab>
+                              </mat-tab-group>
+                              <div class="spinners">
+                                <mat-spinner diameter=100 class="spinner" *ngIf="loading"></mat-spinner>
+                              </div>
+                    </div>
+
+                </div> 
+
+
+
+            </div>
+            <div class="col-3">
+                <div class="card container-card">
+                    <div class="card-header side-col-header">Details</div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tbody>
+                                <tr *ngFor="let row of this.RightPane">
+                                <th><h5 >{{row.Name}}</h5></th>
+                                <td><h5 class="text-muted">{{GetDataProperty(row.DataField,this.User)}}</h5></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+    <br>
+    
+
+</main>

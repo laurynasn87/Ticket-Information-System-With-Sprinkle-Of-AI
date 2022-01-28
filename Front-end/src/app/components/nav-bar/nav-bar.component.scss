@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Allerta+Stencil&display=swap');
+
+body {
+    background-color: #eee
+}
+
+.navbar-nav>li>a {
+    text-transform: uppercase;
+    font-size: 17px;
+    margin-right: 20px;
+    color: #fff
+}
+
+.navbar-toggler {
+    padding: .20rem .50rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    background-color: transparent;
+    border: 1px solid white
+}
+
+.nav-link {
+    color: #fff !important;
+    cursor: pointer;
+    
+}
+.select-menu
+{
+    padding-top: 0 !important;
+}
+.menu-name
+{
+    border-bottom: lightgrey;
+    border-bottom-style: groove;
+    background-color: whitesmoke;
+    text-align-last:center;
+    font-weight: bold;
+
+}
+.new-ticket-icon
+{   
+    vertical-align: -webkit-baseline-middle;
+    margin-right: 1em;
+    padding-top: .3rem;
+    cursor: pointer;
+}
+.wrapper {
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    background-color: #9fd3ce;
+    clip-path: polygon(71% 0, 100% 0, 100% 50%, 100% 100%, 61% 100%);
+    transition: 1s all
+}
+
+.navbar-brand {
+    color: #fff;
+    font-family: 'Allerta Stencil', sans-serif;
+    margin-bottom: 4px;
+    font-size: 27px
+}
+
+.navbar-red:hover .wrapper {
+    clip-path: polygon(81% 0, 100% 0, 100% 50%, 100% 100%, 65% 100%)
+}
+
+.navbar-brand:hover {
+    color: #fff
+}
+
+.navbar-red {
+    background-color:#32576a;
+    color: #fff
+}
+
+.all-show {
+    z-index: 10
+}
+.searchbar{
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.SearchBarContainer
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.menu-text
+{
+    margin-left: .3em;
+    font-size: 1.3em;
+}
+.menu-dropdown
+{
+    border: none;
+    background-color:transparent;
+
+}

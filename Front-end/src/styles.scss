@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.green-snackbar {
+    background: rgb(0, 129, 47);
+    color: white;
+}
+.red-snackbar {
+    background: rgb(224, 9, 9);
+    color: white;
+}
+.cdk-global-overlay-wrapper, .cdk-overlay-container { z-index: 9999!important; } 

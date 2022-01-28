@@ -1,0 +1,56 @@
+.main-bg{
+    background-color: #f8f4f4;
+    width: 100%;
+    position: fixed;
+    height : 100%;
+    min-height : 100%;
+    padding-top: 1vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    overflow: auto;
+    }
+    .container-card
+    {
+        padding: .5vw;
+        border: .1rem solid #a6a6a6;
+    }
+    .card
+    {
+        border-radius: 0.7rem;
+    }
+    .card-title
+    {
+        margin-bottom: .5em;
+    }
+    .card-body
+    {
+        padding-bottom: 2em;
+        padding-top: 0em;
+    }
+    .card-header
+    {
+
+        font-size: 1.2vw;
+        font-weight: bold;
+        border-radius: 0;
+    }
+    .avatar
+    {
+        width: 4vw;
+        position: relative;
+        top: -5;
+        border-radius: 50%;
+    }
+    .li-link
+    {
+        cursor: pointer;
+    }
+    .side-col-header
+{
+border-top-left-radius: .5em;
+border-top-right-radius: .5em;
+}
+.spinners
+{
+    text-align: -webkit-center;
+}

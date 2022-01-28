@@ -1,0 +1,152 @@
+.main-bg{
+    background-color: #f8f4f4;
+    width: 100%;
+    position: fixed;
+    height : 100%;
+    min-height : 100%;
+    padding-top: 3%;
+    padding-bottom: 1vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    overflow: auto;
+    text-align: -webkit-center;
+    }
+    .container-card
+    {
+        padding: .5vw;
+        border: .1rem solid #a6a6a6;
+        width: 70%;
+    }
+    .card
+    {
+        border-radius: 0.7rem;
+    }
+    .card-title
+    {
+        margin-bottom: .5em;
+    }
+    .card-body
+    {
+        padding-bottom: 2em;
+        padding-top: 0em;
+    }
+    .user-div
+    {
+        width: 99%;
+    }
+    .card-header
+    {
+        background-color:#32576a;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 0;
+    }
+    :host {
+        >.container {
+            max-width: 1264px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            background: none;
+        }
+        ::ng-deep {
+            .mat-tab-group {
+                flex-direction: row;
+            }
+            .mat-tab-header {
+              border-bottom: none;
+            }
+            .mat-tab-header-pagination {
+                display: none !important;
+            }
+            .mat-tab-labels {
+                flex-direction: column;
+            }
+            .mat-ink-bar {
+                height: 100%;
+                left: 98% !important;
+            }
+            .mat-tab-body-wrapper {
+                flex: 1 1 auto;
+                margin-left: 1em;
+            }
+            .mat-tab-label-content
+            {
+                font-size: 1.5em;
+            }
+        }
+    }
+    
+    .container {
+        position: relative;
+        width: 100%;
+        flex: 1 0 auto;
+        margin: 0 auto;
+        text-align: left;
+        margin-bottom: 1em;
+    }
+    
+    #content {
+        box-sizing: content-box;
+        margin: 0 auto;
+        background-color: #ffffff;
+    }
+    
+    #content {
+        max-width: 98%;
+        width: 100%;
+        background-color: #ffffff;
+        padding-left: 0;
+        margin-left: 0;
+        margin-right: 0;
+        box-sizing: border-box;
+    }
+    
+    #content,
+    #main-content {
+        &::before,
+        &::after {
+            content: "";
+            display: table;
+        }
+        &::after {
+            clear: both;
+        }
+    }
+    .mat-simple-snackbar{
+        background-color: blanchedalmond;
+        font-size: medium;
+    }
+    .Snack-Bar
+    {
+        background-color: white;
+    }
+    ::ng-deep .Snack-Bar .mat-simple-snackbar {
+        background-color: blanchedalmond;
+        color: black;
+        font-size: medium;
+      }
+    .number-field
+    {
+        width: fit-content;
+    }
+    .new-user-icon
+    {
+        color: green;
+        cursor: pointer;
+        float: right;
+    }
+    .modal-backdrop {
+        z-index: -1;
+    }
+    .spinner
+    {
+        text-align: -webkit-center
+    }
+    .action-buttons
+    {
+        display: flex;
+        justify-content: space-evenly;
+    }

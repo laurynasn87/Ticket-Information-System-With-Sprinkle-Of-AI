@@ -1,0 +1,50 @@
+.main-bg{
+    background-color: #f8f4f4;
+    width: 100%;
+    position: fixed;
+    height : 100%;
+    min-height : 100%;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    padding-bottom: 6vw;
+    overflow: auto;
+    }
+    .container-card
+    {
+        padding: .5vw;
+        border: .1rem solid #a6a6a6;
+        margin-top: 1em;
+    }
+    .card
+    {
+        border-radius: 0.7rem;
+        min-width: 20%;
+    }
+    .selected-chart
+    {
+        width: 30vw !important;
+        height: auto !important;
+    }
+    .chart
+    {
+        width: 20vw !important;
+        height: auto !important;
+    }
+    .expand-icon
+    {
+        margin-left: 1rem;
+        float: right;
+        cursor: pointer;
+    }
+    .chart-container
+    {
+        margin-top: 1rem ;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+    }
+    .no-data
+    {
+        position: absolute;
+        top:52%;
+        left: 25%;
+    }

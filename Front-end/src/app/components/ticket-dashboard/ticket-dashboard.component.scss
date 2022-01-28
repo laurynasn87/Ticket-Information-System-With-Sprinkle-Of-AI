@@ -1,0 +1,159 @@
+
+.main-bg{
+    background-color: #f8f4f4;
+    width: 100%;
+    position: fixed;
+    height : 100%;
+    min-height : 100%;
+    padding-top: 1vw;
+    padding-bottom: 1vw;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    overflow: auto;
+    }
+    .container-card
+    {
+        padding: .5vw;
+        border: .1rem solid #a6a6a6;
+    }
+    .card
+    {
+        border-radius: 0.7rem;
+    }
+    .card-title
+    {
+        margin-bottom: .5em;
+    }
+    .card-body
+    {
+        padding-bottom: 2em;
+        padding-top: 0em;
+        white-space: pre-line
+    }
+    .card-header
+    {
+        background-color:#32576a;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 0;
+    }
+    .avatar
+    {
+        width: 2vw;
+        border-radius: 50%;
+    }
+    .img-Tis
+    {
+        width: 5rem;
+        height: 3rem;
+        border-radius: 35%;
+        position: absolute;
+    }
+    .name
+    {
+        cursor: pointer;
+    }
+    .type-dropdown
+    {
+        position: absolute;
+        border: none;
+        background-color: white;
+        left: 97%;
+        bottom: 30%;
+    }
+    .type-text
+    {
+        margin-left: .3em;
+        font-size: 1.5em;
+    }
+    .Ai-card
+    {
+        border-radius: 0.5em;
+        margin-bottom: 3em;
+
+    }
+    .tile-line
+    {
+        cursor: pointer;
+    }
+    .tile-line:hover {
+        color: #1a06c9;
+    }
+    .container-fluid
+    {
+        padding-bottom: 2em;
+    }
+    .comment-body
+    {
+        background-color: aliceblue;
+        border-radius: .5rem;
+    }
+    .file-name
+    {
+        font-size:15px;
+        
+    }
+    .comment-img
+    {
+        height: 4vw;
+        overflow: hidden;
+    }
+    .doc-img
+    {
+        width: auto;
+    }
+    .file-card
+    {
+        width: 8rem;
+        align-self: flex-end
+    }
+    .side-table
+    {
+        table-layout: fixed;
+    }
+    .truncated-text
+{
+    max-width: 98%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.side-col-header
+{
+border-top-left-radius: .5em;
+border-top-right-radius: .5em;
+}
+.PrivateResponseValueTextArea
+{
+    background-color: lightyellow;
+}
+.scroll-to-top
+{
+    position: fixed;
+    bottom: 3em;
+    right: 6em;
+    border-radius: 2em;
+    background-color: white;
+    padding: 1em;
+    border: solid;
+    cursor: pointer;
+}
+.spinners
+{
+    text-align: -webkit-center;
+}
+.rotate
+{
+    background-color: transparent;
+}
+.new-comment
+{
+    padding: 0
+}
+.edit-buttons
+{
+    cursor: pointer;
+}

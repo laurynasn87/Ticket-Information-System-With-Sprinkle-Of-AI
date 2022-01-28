@@ -1,0 +1,40 @@
+<mat-progress-bar *ngIf="show_bar" mode="indeterminate"></mat-progress-bar>
+<main class="main-bg">
+  <div class="card container-card">
+
+    <mat-button-toggle-group name="type" [(ngModel)]="Filter" aria-label="Ingredients" multiple>
+      <mat-button-toggle value="Ticket">Ticket</mat-button-toggle>
+      <mat-button-toggle value="User">User</mat-button-toggle>
+      <mat-button-toggle value="Organization">Organization</mat-button-toggle>
+      <mat-button-toggle value="Ai Models">AI Models</mat-button-toggle>
+      <mat-button-toggle *ngIf="authSvc.isUserLinked" value="My">My</mat-button-toggle>
+    </mat-button-toggle-group>
+
+  </div>
+  <div class="d-flex chart-container mt-3">
+    <div *ngFor="let chart of Charts">
+      <div class="card mx-2 mb-3" *ngIf="ShowChart(chart)">
+        <div class="card-body">
+          <div class="card-title" style="text-align: center;">
+            <b> {{chart.Name}} </b>
+          </div>
+          <div>
+            <canvas baseChart *ngIf="chart.Data.labels?.length > 0" style="display: block" class="chart"
+              [data]="chart.Data" [type]="chart.ChartType" [options]="ChartOptions" [plugins]="ChartPlugins"
+              [legend]="chart.Legend">
+            </canvas>
+            <div>
+              <h3 class="no-data" *ngIf="chart.Data.labels?.length == 0">No Data To Show</h3>
+              <canvas baseChart *ngIf="chart.Data.labels?.length == 0" style="display: block" class="chart"
+                [data]="{labels:['Empty'],datasets:[{data:[100]}]}" [type]="chart.ChartType" [options]="ChartOptions"
+                [plugins]="ChartPlugins" [legend]="chart.Legend">
+              </canvas>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

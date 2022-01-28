@@ -1,0 +1,225 @@
+<main class="main-bg">
+  <div class="card container-card"  *ngIf="!authService.isRequester">
+    <h3 class="card-title">Ticket Information</h3>
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-md pb-2">
+          <div class="card">
+            <div class="card-header">Newest</div>
+            <div class="card-body">
+              <table class="table">
+                <div class="spinners">
+                  <h4 *ngIf="Tiles.length < 1 || Tiles.newest?.length < 1 && loading == false">No records to show</h4>
+                  <mat-spinner class="spinner" *ngIf="this.loading"></mat-spinner>
+                </div>
+                <tbody>
+                  <tr class="tile-line" [routerLink]="['/Ticket', row.id]" *ngFor="let row of Tiles.newest">
+                    <td class="text-muted">
+                      <div class="row secondary-ticket-info">#{{row.id}}</div>
+                      <div class="row secondary-ticket-info">{{CalculateDateDiff(row.created_at)}}</div>
+                    </td>
+                    <td class="text-muted">{{ShortenPriority(row.priority)}}</td>
+                    <td class="tile-subject">
+                      <div class="truncated-text" title="{{row.subject}}">{{row.subject}}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md pb-2">
+          <div class="card">
+            <div class="card-header">Awaiting assigning</div>
+            <div class="card-body">
+              <table class="table">
+                <div class="spinners">
+                  <h4 *ngIf="Tiles.length < 1 || Tiles.awaiting_assigning?.length < 1 && loading == false">No records to
+                    show</h4>
+                  <mat-spinner class="spinner" *ngIf="this.loading"></mat-spinner>
+                </div>
+                <tbody>
+                  <tr class="tile-line" [routerLink]="['/Ticket', row.id]" *ngFor="let row of Tiles.awaiting_assigning">
+                    <td class="text-muted">
+                      <div class="row secondary-ticket-info">#{{row.id}}</div>
+                      <div class="row secondary-ticket-info">{{CalculateDateDiff(row.created_at)}}</div>
+                    </td>
+                    <td class="text-muted">{{ShortenPriority(row.priority)}}</td>
+                    <td class="tile-subject">
+                      <div class="truncated-text" title="{{row.subject}}">{{row.subject}}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md pb-2">
+          <div class="card">
+            <div class="card-header">Awaiting response</div>
+            <div class="card-body">
+              <table class="table">
+                <div class="spinners">
+                  <h4 *ngIf="Tiles.length < 1 || Tiles.awaiting_response?.length < 1 && loading == false">No records to
+                    show</h4>
+                  <mat-spinner class="spinner" *ngIf="this.loading"></mat-spinner>
+                </div>
+                <tbody>
+                  <tr class="tile-line" [routerLink]="['/Ticket', row.id]" *ngFor="let row of Tiles.awaiting_response">
+                    <td class="text-muted">
+                      <div class="row secondary-ticket-info">#{{row.id}}</div>
+                      <div class="row secondary-ticket-info">{{CalculateDateDiff(row.updated_at)}}</div>
+                    </td>
+                    <td class="text-muted">{{ShortenPriority(row.priority)}}</td>
+                    <td class="tile-subject">
+                      <div class="truncated-text" title="{{row.subject}}">{{row.subject}}</div>
+                    </td>
+                    <td>{{row.assignee_id.name}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md pb-2">
+          <div class="card">
+            <div class="card-header">Recently Closed</div>
+            <div class="card-body">
+              <table class="table">
+                <div class="spinners">
+                  <h4 *ngIf="Tiles.length < 1 || Tiles.recently_closed?.length < 1 && loading == false">No records to
+                    show</h4>
+                  <mat-spinner class="spinner" *ngIf="this.loading"></mat-spinner>
+                </div>
+                <tbody>
+                  <tr class="tile-line" [routerLink]="['/Ticket', row.id]" *ngFor="let row of Tiles.recently_closed">
+                    <td class="text-muted">
+                      <div class="row secondary-ticket-info">#{{row.id}}</div>
+                      <div class="row secondary-ticket-info">{{CalculateDateDiff(row.updated_at)}}</div>
+                    </td>
+                    <td class="text-muted">{{ShortenPriority(row.priority)}}</td>
+                    <td class="tile-subject">
+                      <div class="truncated-text" title="{{row.subject}}">{{row.subject}}</div>
+                    </td>
+                    <td>{{row.assignee_id.name}}</td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card container-card my-3" *ngIf="authService.isUserLinked || authService.isRequester">
+    <div class="d-flex justify-content-between"><h3 class="card-title"> My Ticket Information</h3><span class="text-muted tile-line" [routerLink]="['/User', Linked_User.id]" *ngIf="Linked_User.name != undefined">Linked To {{Linked_User.name}}</span> <mat-spinner diameter=30 class="mx-3"  *ngIf="Linked_User.name == undefined"></mat-spinner></div>
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-md pb-2">
+          <div class="card">
+            <div class="card-header">My Newest</div>
+            <div class="card-body">
+              <table class="table">
+                <div class="spinners">
+                  <h4 *ngIf="Tiles.length < 1 || Tiles.my_newest?.length < 1 && loading == false">No records to show</h4>
+                  <mat-spinner class="spinner" *ngIf="this.loading"></mat-spinner>
+                </div>
+                <tbody>
+                  <tr class="tile-line" [routerLink]="['/Ticket', row.id]" *ngFor="let row of Tiles.my_newest">
+                    <td class="text-muted">
+                      <div class="row secondary-ticket-info">#{{row.id}}</div>
+                      <div class="row secondary-ticket-info">{{CalculateDateDiff(row.created_at)}}</div>
+                    </td>
+                    <td class="text-muted">{{ShortenPriority(row.priority)}}</td>
+                    <td class="tile-subject">
+                      <div class="truncated-text" title="{{row.subject}}">{{row.subject}}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md pb-2">
+          <div class="card">
+            <div class="card-header">My Recently Active</div>
+            <div class="card-body">
+              <table class="table">
+                <div class="spinners">
+                  <h4 *ngIf="Tiles.length < 1 || Tiles.my_recently_active?.length < 1 && loading == false">No records to
+                    show</h4>
+                  <mat-spinner class="spinner" *ngIf="this.loading"></mat-spinner>
+                </div>
+                <tbody>
+                  <tr class="tile-line" [routerLink]="['/Ticket', row.id]" *ngFor="let row of Tiles.my_recently_active">
+                    <td class="text-muted">
+                      <div class="row secondary-ticket-info">#{{row.id}}</div>
+                      <div class="row secondary-ticket-info">{{CalculateDateDiff(row.updated_at)}}</div>
+                    </td>
+                    <td class="text-muted">{{ShortenPriority(row.priority)}}</td>
+                    <td class="tile-subject">
+                      <div class="truncated-text" title="{{row.subject}}">{{row.subject}}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md pb-2">
+          <div class="card">
+            <div class="card-header">My Awaiting response</div>
+            <div class="card-body">
+              <table class="table">
+                <div class="spinners">
+                  <h4 *ngIf="Tiles.length < 1 || Tiles.my_awaiting_response?.length < 1 && loading == false">No records to
+                    show</h4>
+                  <mat-spinner class="spinner" *ngIf="this.loading"></mat-spinner>
+                </div>
+                <tbody>
+                  <tr class="tile-line" [routerLink]="['/Ticket', row.id]" *ngFor="let row of Tiles.my_awaiting_response">
+                    <td class="text-muted">
+                      <div class="row secondary-ticket-info">#{{row.id}}</div>
+                      <div class="row secondary-ticket-info">{{CalculateDateDiff(row.updated_at)}}</div>
+                    </td>
+                    <td class="text-muted">{{ShortenPriority(row.priority)}}</td>
+                    <td class="tile-subject">
+                      <div class="truncated-text" title="{{row.subject}}">{{row.subject}}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md pb-2">
+          <div class="card">
+            <div class="card-header"> My Recently Closed</div>
+            <div class="card-body">
+              <table class="table">
+                <div class="spinners">
+                  <h4 *ngIf="Tiles.length < 1 || Tiles.my_recently_closed?.length < 1 && loading == false">No records to
+                    show</h4>
+                  <mat-spinner class="spinner" *ngIf="this.loading"></mat-spinner>
+                </div>
+                <tbody>
+                  <tr class="tile-line" [routerLink]="['/Ticket', row.id]" *ngFor="let row of Tiles.my_recently_closed">
+                    <td class="text-muted">#{{row.id}}</td>
+                    <td class="text-muted">{{ShortenPriority(row.priority)}}</td>
+                    <td class="tile-subject">
+                      <div class="truncated-text" title="{{row.subject}}">{{row.subject}}</div>
+                    </td>
+                    <td>{{CalculateDateDiff(row.updated_at)}}</td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

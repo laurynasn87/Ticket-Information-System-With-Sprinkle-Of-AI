@@ -1,0 +1,108 @@
+
+<div class="modal-header">
+  <h4 class="modal-title">New Ticket Form</h4>
+  <i class="close fa fa-times fa-2x" (click)="activeModal.dismiss('Cross click')" aria-label="Close"
+    aria-hidden="true"></i>
+
+</div>
+<mat-progress-bar *ngIf="show_bar" mode="indeterminate"></mat-progress-bar>
+<div class="modal-body">
+  <mat-stepper linear #stepper>
+    <mat-step [stepControl]="firstFormGroup">
+      <form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>Ticket info</ng-template>
+        <h5 class="mt-3">Name</h5>
+        <mat-form-field appearance="fill" class="w-100">
+          <input [(ngModel)]="NewTicket.Name" matInput formControlName="firstCtrl" placeholder="Issue Name" required>
+        </mat-form-field>
+        <h5>Description</h5>
+        <mat-form-field class="w-100" appearance="fill">
+          <textarea [(ngModel)]="NewTicket.Description" matInput formControlName="firstCtrl"
+            placeholder="Issue Description" required rows="8"></textarea>
+        </mat-form-field>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>Ticket Details</ng-template>
+        <div class="d-flex justify-content-between">
+          <h5 class="align-self-center">Ticket Sub-Type</h5>
+
+
+          <mat-form-field appearance="fill" class="selects w-40 mt-2">
+            <mat-select [(ngModel)]="NewTicket.SubType" required formControlName="secondCtrl">
+              <mat-option value="issue">
+                Issue
+              </mat-option>
+              <mat-option value="change requests">
+                Change request
+              </mat-option>
+              <mat-option value="question">
+                Question
+              </mat-option>
+              <mat-option value="service requests">
+                Service Request
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="d-flex justify-content-between">
+          <h5 class="align-self-center">Priority</h5>
+
+          <mat-form-field appearance="fill" class="selects w-40 mt-2">
+            <mat-select [(ngModel)]="NewTicket.Priority" required formControlName="secondCtrl">
+              <mat-option value="low">
+                Low
+              </mat-option>
+              <mat-option value="normal">
+                Normal
+              </mat-option>
+              <mat-option value="high">
+                High
+              </mat-option>
+              <mat-option value="urgent">
+                Urgent
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Confirmation</ng-template>
+      <div class="d-flex justify-content-between">
+        <h5 class="align-self-center">Name:</h5>
+        <mat-form-field appearance="fill" class="selects w-40 mt-2">  <input [(ngModel)]="NewTicket.Name" matInput placeholder="Issue Name" style="font-weight: bold; color: black;" [disabled]="true"></mat-form-field>
+      </div>
+
+        <h5 class="align-self-center">Description:</h5>
+        <mat-form-field class="w-100" appearance="fill">
+          <textarea [(ngModel)]="NewTicket.Description" style="font-weight: bold;" rows="8"  matInput [disabled]="true"></textarea>
+        </mat-form-field>
+
+      <div class="d-flex justify-content-between">
+        <h5 class="align-self-center">Sub-Type</h5>
+        <mat-form-field appearance="fill" class="selects w-40 mt-2"> <input style="font-weight: bold; color: black;" [(ngModel)]="NewTicket.SubType" matInput [disabled]="true"></mat-form-field>
+      </div>
+      <div class="d-flex justify-content-between">
+        <h5 class="align-self-center">Priority</h5>
+        <mat-form-field appearance="fill" class="selects w-40 mt-2">  <input style="font-weight: bold; color: black;" [(ngModel)]="NewTicket.Priority" matInput [disabled]="true" ></mat-form-field>
+      </div>
+      <div class="d-flex justify-content-between">
+        <h5 class="align-self-center">Requester</h5>
+        <mat-form-field appearance="fill" class="selects w-40 mt-2"> <input style="font-weight: bold; color: black;" [(ngModel)]="NewTicket.User" matInput [disabled]="true"></mat-form-field>
+      </div>
+      <div class="d-flex justify-content-between">
+        <h5 class="align-self-center">Organization</h5>
+        <mat-form-field appearance="fill" class="selects w-40 mt-2">  <input style="font-weight: bold; color: black;" [(ngModel)]="NewTicket.Organization" matInput [disabled]="true"></mat-form-field>
+      </div>
+
+      
+    </mat-step>
+  </mat-stepper>
+</div>
+<div class="modal-footer d-flex justify-content-between">
+  <button type="button" (click)="goBack(stepper)" [disabled]="show_bar" mat-button class="btn btn-outline-dark">Back</button>
+  <button type="button" *ngIf="stepper.selectedIndex !=2" [disabled]="show_bar" (click)="goForward(stepper)" mat-button class="btn btn-outline-dark">Next</button>
+  <button type="button" *ngIf="stepper.selectedIndex ==2" [disabled]="(NewTicket.Organization=='' || NewTicket.User=='') || show_bar" style="float: right;" (click)="CreateTicket()" mat-button class="btn btn-outline-dark">Complete</button>
+</div>

@@ -1,0 +1,34 @@
+.modal-header
+{
+    background-color: #32576a;
+    color: white;
+    font-weight: bold;
+}
+.modal-body
+{
+padding-bottom: 0;
+padding-right: 0;
+padding-left: 0;
+}
+.modal-footer
+{
+    padding-left:-18px;
+}
+.selects
+{
+    background-color: transparent;
+    width: 35%;
+    border-radius: 20%;
+    text-align: center;
+}
+.zselect
+{
+    z-index: 5000;
+}
+.close
+{
+    cursor: pointer;
+}
+.cdk-global-overlay-wrapper, .cdk-overlay-container {
+    z-index: 99999 !important;
+ }

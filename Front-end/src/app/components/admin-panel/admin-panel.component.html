@@ -1,0 +1,171 @@
+<mat-progress-bar *ngIf="show_bar" mode="indeterminate"></mat-progress-bar>
+<main class="main-bg">
+  <div class="card container-card">
+    <div class="row">
+      <h3 class="card-title ">Admin Controls</h3>
+    </div>
+    <div class="container">
+      <div id="content">
+        <div id="main-content">
+          <mat-tab-group>
+            <mat-tab label="Users">
+              <div class="row user-div">
+                <h3 class="card-title text-center">Users</h3>
+              </div>
+              <div class="spinner">
+                <mat-spinner *ngIf="loading"></mat-spinner>
+              </div>
+              <table class="table" *ngIf="!loading">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Role</th>
+                    <th scope="col" *ngFor="let column of PageConfig">{{column.name}}</th>
+                    <th scope="col">Actions <i class="fa fa-plus fa-lg new-user-icon" (click)='CreateUserModal()'
+                        aria-hidden="true"></i></th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let user of SystemUsers; let i = index">
+                    <tr [ngClass]="{'text-muted': user.disabled}">
+                      <th scope="row">{{i+1}}</th>
+                      <td><i class="mr-1" *ngIf="user.role == 'Admin'" class="fa fa-adn fa-lg" data-toggle="tooltip"
+                          data-placement="top" title="Admin" aria-hidden="true"></i><i class="mr-1"
+                          *ngIf="user.role != 'Admin'" class="fa fa-user fa-lg" data-toggle="tooltip"
+                          data-placement="top" title="User" aria-hidden="true"></i> </td>
+                      <ng-container *ngFor="let column of PageConfig">
+                        <td>{{GetDataProperty(column.dataName,user,column.type)}}</td>
+                      </ng-container>
+                      <td class="action-buttons">
+                        <button class="btn btn-primary" data-toggle="tooltip" data-placement="top"
+                          (click)="resetPassword(user.email)" title="Reset Password"><i class="fa fa-envelope"
+                            aria-hidden="true"></i></button>
+                        <button class="btn btn-warning" data-toggle="tooltip" data-placement="top"
+                          (click)="EditUserModal(user)" title="Edit"><i class="fa fa-pencil"
+                            aria-hidden="true"></i></button>
+                        <button *ngIf="!user.disabled" class="btn btn-danger" data-toggle="tooltip" data-placement="top"
+                          (click)='DisableUser(user.localId)' title="Disable"><i class="fa fa-ban"
+                            aria-hidden="true"></i></button>
+                        <button *ngIf="user.disabled" class="btn btn-success" data-toggle="tooltip" data-placement="top"
+                          (click)='EnableUser(user.localId)' title="Enable"><i class="fa fa-check"
+                            aria-hidden="true"></i></button>
+                        <button class="btn btn-danger" data-toggle="tooltip" data-placement="top"
+                          (click)='DeleteUser(user.localId)' title="Delete"><i class="fa fa-user-times"
+                            aria-hidden="true"></i></button>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </mat-tab>
+            <mat-tab label="Settings">
+              <form class="form-inline">
+                <div class="form-group mb-3">
+                  <mat-slide-toggle name="UpdateFromZendesk" (change)="handleSettings('UpdateFromZendesk')"
+                    [(ngModel)]="Settings.UpdateFromZendesk">Zendesk Data Retrieval</mat-slide-toggle>
+                </div>
+                <div class="form-group mb-3">
+                  <mat-slide-toggle name="Allow_Comments" (change)="handleSettings('Allow_Comments')"
+                    [(ngModel)]="Settings.Allow_Comments">Allow Ticket Comments</mat-slide-toggle>
+                </div>
+                <div class="form-group mb-3">
+                  <div>
+                    <label for="Mode" class="col-form-label">Mode</label>
+                  </div>
+                  <mat-button-toggle-group name="fontStyle" name="Mode" (change)="handleSettings('mode')"
+                    [(ngModel)]="Settings.mode" aria-label="Font Style">
+                    <mat-button-toggle value="lda">lda</mat-button-toggle>
+                    <mat-button-toggle value="hdp">hdp</mat-button-toggle>
+                  </mat-button-toggle-group>
+                </div>
+                <div class="form-group mb-3">
+                  <label for="TopicCount" class="col-form-label">Topic Count</label>
+                  <input type="number" class="form-control number-field mb-1" id="Email" name="TopicCountField"
+                    [(ngModel)]="Settings.Topics_Count">
+                  <button type="submit" (click)="handleSettings('Topics_Count')" class="btn btn-primary">Save</button>
+                </div>
+                <div class="flex mb-2">
+                  <button type="submit" (click)="ButtonSetting('RefreshZendeskData', 'Data refresh has been initiated')" class="btn btn-primary mr-2">Force data
+                    update</button>
+                   <button type="submit" (click)="ButtonSetting('ClearCache','Cache has been cleared')" class="btn btn-primary mx-2 ">Clear Cache</button>
+                </div>
+              </form>
+            </mat-tab>
+            <mat-tab label="Configuration">
+              <mat-form-field appearance="fill">
+                <mat-label>Configuration change</mat-label>
+                <mat-select [(ngModel)]="ConfigSelectedValue" (selectionChange)="configChange($event)">
+                  <mat-option *ngFor="let config of this.Configs" [value]="config.Name">
+                    {{config.Name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div class="form-group">
+                <label for="ConfigValueTextArea">Config value</label>
+                <textarea class="form-control" id="ConfigValueTextArea" [(ngModel)]="ConfigTextAreaValue"
+                  rows="6"></textarea>
+                <button type="submit" (click)="saveConfig()" [disabled]="ConfigSelectedValue == ''"  class="btn btn-primary mt-3 mb-3 pull-right">Save</button>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+<!-- Modal -->
+<div class="modal fade" id="CreationModal" tabindex="-1" role="dialog" aria-labelledby="CreationModal"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 *ngIf="New_User_Form" class="modal-title" id="exampleModalLabel">New User Creation</h5>
+        <h5 *ngIf="!New_User_Form" class="modal-title" id="exampleModalLabel">Edit User</h5>
+        <i class="fa fa-times fa-lg" (click)='closeModal()' aria-hidden="true"></i>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="Email" class="col-form-label">Email<span class="text-danger">*</span></label>
+            <input required type="email" autocomplete="false" class="form-control" id="Email" name="EmailField"
+              [disabled]="!New_User_Form" [(ngModel)]="NewUser.Email">
+            <label for="DisplayName" class="col-form-label">Display Name<span class="text-danger">*</span></label>
+            <input required class="form-control" autocomplete="false" id="DisplayName" name="DisplayName"
+              [(ngModel)]="NewUser.DisplayName">
+            <label for="password" *ngIf="New_User_Form" class="col-form-label">Password<span
+                class="text-danger">*</span></label>
+            <input required *ngIf="New_User_Form" type="password" class="form-control" id="password"
+              name="PasswordField" [(ngModel)]="NewUser.Password" placeholder="Password">
+            <label for="role" class="col-form-label">Role<span class="text-danger">*</span></label>
+            <select required class="form-control" id="role" name="RoleField" [(ngModel)]="NewUser.Role">
+              <option selected>User</option>
+              <option>Requester</option>
+              <option>Admin</option>
+            </select>
+            <label for="user" class="col-form-label">Associated User</label>
+            <select class="form-control" id="user" name="userField" (change)="AssignOrg($event)" [(ngModel)]="NewUser.AssociatedUser">
+              <option selected>--</option>
+              <option *ngFor="let item of GetUnlinkedUsers()">{{item.name}}</option>
+            </select>
+            <label for="org" class="col-form-label">Organization<span class="text-danger" *ngIf="NewUser.Role == 'Requester'">*</span></label>
+            <select class="form-control" id="org" name="orgField" [disabled] = "LockOrgField" [(ngModel)]="NewUser.Organization">
+              <option selected>--</option>
+              <option *ngFor="let item of Organizations">{{item.name}}</option>
+            </select>
+          </div>
+          <div class="modal-footer d-flex justify-content-between">
+            <button type="button" class="btn btn-danger" (click)='closeModal()' data-dismiss="modal">Close</button>
+            <button type="submit" *ngIf="New_User_Form" class="btn btn-success" (click)='CreateUser()'
+              [disabled]="!(this.NewUser != null && this.NewUser.Email !='' && this.NewUser.Password != '' && this.NewUser.DisplayName != '' && (this.NewUser.Role !='' && this.NewUser.Role !='Requester') || (this.NewUser.Role =='Requester' &&  NewUser.Organization != '--'))">Create</button>
+            <button type="submit" *ngIf="!New_User_Form" class="btn btn-success" (click)='EditUser()'
+              [disabled]="!(this.NewUser != null && this.NewUser.Email !='' && this.NewUser.DisplayName != '' && this.NewUser.Role !='')">Save</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
